@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "streamlit_website.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "streamlit_website.py"
+    }
+  ],
+  "env": {
+    // 如果你的Streamlit应用需要环境变量，可以在这里定义
+  }
+}
