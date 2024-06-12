@@ -1,39 +1,56 @@
-# Excel问答处理应用
+# 文件处理工具
 
-欢迎使用Excel问答处理应用，这是一个基于Streamlit的Python应用程序，允许用户上传Excel文件，指定问题和答案的列名，然后处理并下载格式化后的数据。
+这是一个使用Python和Streamlit构建的Web应用程序，用于处理文件并提供两种主要功能：Excel转TXT和切片统计。
 
 ## 功能
 
-- **上传Excel文件**：用户可以上传一个包含问题和答案的Excel文件。
-- **指定列名**：用户通过输入框指定问题和答案对应的列名。
-- **处理数据**：应用程序将根据指定的列名提取问题和答案，并在每行前分别加上“问题：”和“答案：”的标签。
-- **下载处理后的文件**：用户可以将处理后的数据以文本文件的形式下载。
+### Excel转TXT
+- 用户可以上传Excel文件，并指定问题和答案的列名。
+- 程序将读取Excel文件，提取指定列，并在每行前分别添加“问题：”和“答案：”标签。
+- 最终，程序将转换后的数据提供为文本文件下载。
 
-## 使用方法
+### 切片统计
+- 用户可以选择上传txt或docx文件，并进行切片统计。
+- 对于txt文件，程序将统计每个文本块的字数，并找出字数最多的段落。
+- 对于Word文档，程序将统计每个段落的字数，并找出字数最多的段落。
+- 统计结果将保存为Excel文件，并提供下载。
 
-1. **上传文件**：点击页面上的“请选择一个Excel文件”按钮，选择你的Excel文件。
-2. **输入列名**：在提供的输入框中，分别输入问题和答案对应的列名。
-3. **下载文件**：处理完成后，点击“下载处理后的文件”按钮，下载格式化后的文本文件。
+## 快速开始
 
-## 技术栈
+### 环境要求
+- Python 3.x
+- Streamlit
+- Pandas
+- python-docx (仅Word文档处理功能需要)
 
-- **Streamlit**：用于快速构建数据驱动的web应用。
-- **Pandas**：Python数据处理库，用于读取和处理Excel文件。
-
-## 部署
-
-要部署此应用程序，请遵循以下步骤：
-
-1. **安装依赖**：
+### 安装步骤
+1. 克隆仓库到本地机器
    ```bash
-   pip install streamlit pandas openpyxl
-
-2. **运行应用程序**：
+   git clone https://github.com/dinggithub/qa_excel2txt/.git
+   
+2. 进入项目目录
    ```bash
-   streamlit run your_script.py
+   cd yourrepository
+   
+3. 创建虚拟环境（可选）
+   ```bash
+   python -m venv venv
 
-将your_script.py替换为你的Python脚本文件名。
+4. 激活虚拟环境
 
-## 注意事项
-确保上传的Excel文件包含用户指定的列名。
-应用程序目前只支持.xlsx和.xls格式的Excel文件。
+Windows：
+.\venv\Scripts\activate
+
+macOS/Linux：
+source venv/bin/activate
+
+5. 安装依赖
+   ```bash
+   pip install -r requirements.txt
+
+### 运行应用
+在项目根目录下运行以下命令启动Web应用：
+   ```bash
+      streamlit run streamlit_website.py
+
+然后在浏览器中打开 http://localhost:8501 来访问应用。
