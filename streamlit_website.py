@@ -6,8 +6,8 @@ from io import BytesIO
 from datetime import datetime
 
 def excel_to_txt():
-    st.header("Excel转TXT")
-    uploaded_file = st.file_uploader("上传Excel文件", type=["xlsx"])
+    st.header("Excel转QA对TXT")
+    uploaded_file = st.file_uploader("上传Excel文件，将问题列和答案列生成QA对TXT文件", type=["xlsx"])
     if uploaded_file:
         df = pd.read_excel(uploaded_file)
         st.write("Excel文件内容：", df)
