@@ -109,12 +109,12 @@ def extract_pdf():
     st.header("提取PDF页面")
 
     # 上传PDF文件
-    uploaded_file = st.file_uploader("选择要处理的PDF文件", type="pdf")
+    uploaded_file = st.file_uploader("选择要处理的PDF文件，可将页面提取为PDF文件", type="pdf")
 
     if uploaded_file is not None:
         # 获取用户输入的页面范围
         start_page = st.number_input("开始页码", min_value=1, value=1, step=1)
-        end_page = st.number_input("结束页码", min_value=2, value=2, step=1)
+        end_page = st.number_input("结束页码", min_value=1, value=1, step=1)
 
         if st.button("提取页面"):
             # 读取PDF文件
@@ -122,11 +122,11 @@ def extract_pdf():
             num_pages = len(pdf_reader.pages)
 
             # 检查页码范围是否合法
-            if start_page < 1 or end_page > num_pages or start_page >= end_page:
+            if start_page < 1 or end_page < start_page or end_page > num_pages:
                 st.error("无效的页码范围,请重新输入。")
             else:
                 # 提取指定页面范围并保存为新的PDF文件
-                for page_num in range(start_page - 1, end_page - 1):
+                for page_num in range(start_page - 1, end_page):
                     new_pdf = PyPDF2.PdfWriter()
                     new_pdf.add_page(pdf_reader.pages[page_num])
 
