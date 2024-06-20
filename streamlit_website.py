@@ -104,8 +104,49 @@ def pdf_to_txt():
             mime="text/plain"
         )
 
+def extract_pdf():
+
+    st.header("提取PDF页面")
+
+    # 上传PDF文件
+    uploaded_file = st.file_uploader("选择要处理的PDF文件", type="pdf")
+
+    if uploaded_file is not None:
+        # 获取用户输入的页面范围
+        start_page = st.number_input("开始页码", min_value=1, value=1, step=1)
+        end_page = st.number_input("结束页码", min_value=2, value=2, step=1)
+
+        if st.button("提取页面"):
+            # 读取PDF文件
+            pdf_reader = PyPDF2.PdfReader(uploaded_file)
+            num_pages = len(pdf_reader.pages)
+
+            # 检查页码范围是否合法
+            if start_page < 1 or end_page > num_pages or start_page >= end_page:
+                st.error("无效的页码范围,请重新输入。")
+            else:
+                # 提取指定页面范围并保存为新的PDF文件
+                for page_num in range(start_page - 1, end_page - 1):
+                    new_pdf = PyPDF2.PdfWriter()
+                    new_pdf.add_page(pdf_reader.pages[page_num])
+
+                    new_pdf_filename = f"page_{page_num + 1}.pdf"
+                    with open(new_pdf_filename, "wb") as new_file:
+                        new_pdf.write(new_file)
+
+                    # 将新的PDF文件作为下载链接提供
+                    with open(new_pdf_filename, "rb") as file:
+                        st.download_button(
+                            label=f"下载 {new_pdf_filename}",
+                            data=file.read(),
+                            file_name=new_pdf_filename,
+                            mime="application/pdf",
+                        )
+
+                st.success("页面提取完成!")
+
 st.title("文件处理工具")
-tabs = st.tabs(["Excel转TXT", "切片统计", "PDF转TXT"])
+tabs = st.tabs(["Excel转TXT", "切片统计", "PDF转TXT", "提取PDF页面"])
 
 with tabs[0]:
     excel_to_txt()
@@ -115,3 +156,6 @@ with tabs[1]:
 
 with tabs[2]:
     pdf_to_txt()
+
+with tabs[3]:
+    extract_pdf()
