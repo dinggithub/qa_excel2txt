@@ -5,6 +5,7 @@ import PyPDF2
 from io import BytesIO
 from datetime import datetime
 import os
+import chardet
 
 def excel_to_txt():
     st.header("Excel转QA对TXT")
@@ -146,27 +147,29 @@ def extract_pdf():
 
                 st.success("页面提取完成!")
 
-def merge_txt_files():
-    st.header("合并TXT文件")
-    # 上传文件
-    uploaded_files = st.file_uploader("上传多个TXT文件", type="txt", accept_multiple_files=True)
+def detect_encoding(file):
+    raw_data = file.read()
+    result = chardet.detect(raw_data)
+    encoding = result['encoding']
+    file.seek(0)  # 重置文件指针
+    return encoding
 
+def merge_txt_files():
+    uploaded_files = st.file_uploader("上传多个TXT文件", type="txt", accept_multiple_files=True)
+    
     if uploaded_files:
-        # 将文件按照名字排序
         uploaded_files.sort(key=lambda x: x.name)
-            
-        # 合并文件内容
         merged_content = ""
+        
         for uploaded_file in uploaded_files:
-            content = uploaded_file.read().decode("utf-8")
+            encoding = detect_encoding(uploaded_file)
+            content = uploaded_file.read().decode(encoding)
             merged_content += content + "\n"
-            
-        # 将合并后的内容写入新的txt文件
+        
         merged_file_name = "merged_file.txt"
         with open(merged_file_name, "w", encoding="utf-8") as merged_file:
             merged_file.write(merged_content)
-            
-        # 提供下载链接
+        
         with open(merged_file_name, "rb") as merged_file:
             st.download_button(
                 label="下载合并后的TXT文件",
@@ -189,6 +192,6 @@ with tabs[2]:
 
 with tabs[3]:
     extract_pdf()
-
+    
 with tabs[4]:
     merge_txt_files()
