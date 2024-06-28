@@ -163,7 +163,19 @@ def merge_txt_files():
         
         for uploaded_file in uploaded_files:
             encoding = detect_encoding(uploaded_file)
-            content = uploaded_file.read().decode(encoding)
+            if encoding is None:
+                encoding = 'utf-8'  # 默认使用utf-8编码
+            
+            try:
+                content = uploaded_file.read().decode(encoding)
+            except UnicodeDecodeError:
+                # 尝试使用其他常见编码
+                try:
+                    content = uploaded_file.read().decode('gb2312')
+                except UnicodeDecodeError:
+                    st.error(f"文件 {uploaded_file.name} 解码失败，无法处理该文件。")
+                    return
+            
             merged_content += content + "\n"
         
         merged_file_name = "merged_file.txt"
